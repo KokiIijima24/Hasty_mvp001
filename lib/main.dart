@@ -1,25 +1,55 @@
+import 'package:fliutter_hello_world/view-ctrl-bloc.dart';
+import 'package:fliutter_hello_world/view.dart';
 import 'package:flutter/material.dart';
 import 'package:swipeable_stack/swipeable_stack.dart';
 
 import 'UserModel.dart';
+import 'footer.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  String title = "Hasty";
 
-  // This widget is the root of your application.
+   MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyApp createState() => _MyApp();
+}
+
+class _MyApp extends State<MyApp> {
+  late ViewCtrlBloc viewCtrl;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+        debugShowCheckedModeBanner: false,
+        title: '',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
+            ),
+            body: View(viewCtrl: viewCtrl.viewStream),
+        bottomNavigationBar: Footer(viewCtrl: viewCtrl.viewSink),
+    ));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    viewCtrl = ViewCtrlBloc();
+  }
+
+  @override
+  void dispose() {
+    viewCtrl.dispose();
+    super.dispose();
   }
 }
 
@@ -43,9 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // 必要に応じてデータを追加する
     ];
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: SwipeableStack<IdentifiableUser>(
         dataSet: identifiableUsers,
         builder: (context, IdentifiableUser data, constraints) {
