@@ -1,6 +1,6 @@
+import 'package:fliutter_hello_world/pages/search.dart';
 import 'package:flutter/material.dart';
-import 'main.dart';
-import 'match_list.dart';
+import 'pages/match_list.dart';
 
 class View extends StatefulWidget {
   final Stream<int> viewCtrl;
